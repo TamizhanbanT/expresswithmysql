@@ -68,6 +68,23 @@ app.put('/:studId', (req, res) => {
     });
 });
 
+// Delete a student (DELETE)
+app.delete('/:studId', (req, res) => {
+    const { studId } = req.params;
+    const query = 'DELETE FROM students WHERE studId = ?';
+    db.query(query, [studId], (err, result) => {
+        if (err) {
+            console.error('Error deleting student:', err);
+            res.status(500).json({ message: 'Failed to delete student' });
+            return;
+        }
+        if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Student not found' });
+            return;
+        }
+        res.json({ message: 'Student deleted successfully' });
+    });
+});
 
 
 // Start the server
